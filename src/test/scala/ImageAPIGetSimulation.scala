@@ -17,12 +17,13 @@ class ImageAPIGetSimulation extends Simulation with NdlaClient {
   val httpConf = http
     .baseURL("https://test.api.ndla.no/image-api/v1")
 
-  val scn = scenario("BasicSimulation").repeat(200) {
-    exec(http("request_1")
+  val scn = scenario("BasicSimulation").repeat(600) {
+    exec(http("getting image-list of 100")
       .get("/images/?page-size=100").headers(Map("Authorization" -> s"Bearer $token")))
+      .pause(1)
   }
 
   setUp(
-    scn.inject(atOnceUsers(500))
+    scn.inject(atOnceUsers(2000))
   ).protocols(httpConf)
 }
